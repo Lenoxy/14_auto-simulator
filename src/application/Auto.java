@@ -127,4 +127,9 @@ public class Auto {
 			System.out.println("[Gear] " + this + " is in gear 6");
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return marke;
+	}
 }

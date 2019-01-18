@@ -1,7 +1,10 @@
 package application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TextField;
@@ -11,7 +14,7 @@ public class AutoSimController {
 	public int mode;
 	
 	@FXML
-	private SplitMenuButton dropdownMenu;
+	private ComboBox<Auto> dropdownMenu;
 	@FXML
 	private Button key;
 	@FXML
@@ -29,11 +32,15 @@ public class AutoSimController {
 	@FXML
 	public Label carLabel;
 	
-	Auto nissan = new Auto();
-	Auto fiat = new Auto();
-	Auto bugatti = new Auto();
+	Auto car;
+	
+
 	
 	public void initialize() {
+		
+		Auto nissan = new Auto();
+		Auto fiat = new Auto();
+		Auto bugatti = new Auto();
 		nissan.setMarke("Nissan");
 		nissan.setPs(190);
 		nissan.setTopSpeed(225);
@@ -43,17 +50,29 @@ public class AutoSimController {
 		bugatti.setMarke("Bugatti");
 		bugatti.setPs(265);
 		bugatti.setTopSpeed(280);
+		
+		ObservableList<Auto> autoListe =  FXCollections.observableArrayList();
+		autoListe.add(nissan);
+		autoListe.add(fiat);
+		autoListe.add(bugatti);
+		
+		dropdownMenu.setItems(autoListe);
+		car = nissan;
+		dropdownMenu.setValue(car);
+		
+		
 		reload();
 	}
 
-	
 	public void onDropdownMenuPress() {
 		
+		car = dropdownMenu.getValue();
+		reload();
+	
 	}
 	
 	
 	public void onKeyPress() {
-		Auto car = getActiveCar();
 		car.switchMotorState();
 		if(car.isIstMotorGestartet() == true) {
 			carLabel.setText("On");
@@ -64,25 +83,22 @@ public class AutoSimController {
 	}
 	
 	public void onHornPress() {
-		Auto car = getActiveCar();
 		car.horn();
 	}
 	
 	public void onBreakPress() {
-		Auto car = getActiveCar();
 		car.breakCar();
 		car.checkGears();
 		reload();
 	}
 	
 	public void onAcceleratePress(){
-		Auto car = getActiveCar();
 		car.accelerateCar();
 		car.checkGears();
 		reload();
 	}
 	
-	
+	/*
 	
 	//Mode switcher
 	public void onNissanPress() {
@@ -115,10 +131,12 @@ public class AutoSimController {
 		default:
 			return null;
 		}
+		
+		
 	}
 	
-	public void reload() {
-		Auto car = getActiveCar();
+	*/
+	public void reload() {	 
 		ps.setText(car.getPs() + "");
 		speed.setText(car.getAktuelleGeschwindigkeit() + "");
 		gear.setText(car.getAktuellerGang() + "");
